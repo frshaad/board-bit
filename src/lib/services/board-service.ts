@@ -11,6 +11,11 @@ export const boardService = {
     return boardRepo.getById(boardId);
   },
 
+  async getBoardsForSpace(spaceId: string): Promise<Board[]> {
+    const allBoards = await this.getBoards();
+    return allBoards.filter((board) => board.spaceId === spaceId);
+  },
+
   async createBoard(board: Board): Promise<void> {
     await boardRepo.create(board);
   },

@@ -11,6 +11,11 @@ export const columnService = {
     return columnRepo.getById(columnId);
   },
 
+  async getColumnsForBoard(boardId: string): Promise<Column[]> {
+    const allColumns = await this.getColumns();
+    return allColumns.filter((col) => col.boardId === boardId);
+  },
+
   async createColumn(column: Column): Promise<void> {
     await columnRepo.create(column);
   },

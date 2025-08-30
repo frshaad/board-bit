@@ -10,6 +10,11 @@ export const taskService = {
     return taskRepo.getById(taskId);
   },
 
+  async getTasksForColumn(columnId: string): Promise<Task[]> {
+    const allTasks = await this.getTasks();
+    return allTasks.filter((task) => task.columnId === columnId);
+  },
+
   async createTask(task: Task): Promise<void> {
     await taskRepo.create(task);
   },
