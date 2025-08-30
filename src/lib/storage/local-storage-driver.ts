@@ -1,9 +1,6 @@
 import type { StorageDriver } from '@/types/storage-driver';
-import type { BaseEntity } from '../schema/base';
 
-export class LocalStorageDriver<T extends Pick<BaseEntity, 'id'>>
-  implements StorageDriver<T>
-{
+class LocalStorageDriver<T extends { id: string }> implements StorageDriver<T> {
   constructor(private readonly namespace: string) {}
 
   private read(): Record<string, T> {
@@ -46,4 +43,10 @@ export class LocalStorageDriver<T extends Pick<BaseEntity, 'id'>>
   async clear(): Promise<void> {
     this.write({});
   }
+}
+
+export function localStorageDriver<T extends { id: string }>(
+  namespace: string,
+): StorageDriver<T> {
+  return new LocalStorageDriver<T>(namespace);
 }
