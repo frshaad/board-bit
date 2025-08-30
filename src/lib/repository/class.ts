@@ -1,8 +1,8 @@
 import { ulid } from 'ulid';
 import { type z } from 'zod';
 import { type StorageDriver } from '@/types/storage-driver';
-import { type BaseEntity } from './schema/base';
-import { nowISO } from './utils';
+import { type BaseEntity } from '../schema/base';
+import { nowISO } from '../utils';
 
 export class Repository<T extends BaseEntity, S extends z.ZodTypeAny<T>> {
   constructor(
