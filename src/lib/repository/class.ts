@@ -1,5 +1,6 @@
 import { ulid } from 'ulid';
 import { type z } from 'zod';
+import { NotFoundError, VersionMismatchError } from '@/lib/errors';
 import { type StorageDriver } from '@/types/storage-driver';
 import { type BaseEntity } from '../schema/base';
 import { nowISO } from '../utils';
@@ -36,7 +37,14 @@ export class Repository<T extends BaseEntity, S extends z.ZodTypeAny<T>> {
   async update(id: string, patch: Partial<T>): Promise<T> {
     const existingEntity = await this.driver.getById(id);
     if (!existingEntity) {
-      throw new Error(`Entity with id ${id} not found`);
+      throw new NotFoundError('Entity', id);
+    }
+
+    if (
+      patch.version !== undefined &&
+      patch.version !== existingEntity.version
+    ) {
+      throw new VersionMismatchError(id, patch.version, existingEntity.version);
     }
 
     const updated = {
